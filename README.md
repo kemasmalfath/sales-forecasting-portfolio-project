@@ -47,7 +47,7 @@ Dataset yang digunakan bersumber dari **UCI Machine Learning Repository — Onli
 2. **Mempertahankan `CustomerID` Kosong:** Sekitar `24,9%` transaksi tidak memiliki `CustomerID` (pembeli tamu/*guest checkout*). Baris ini **tetap dipertahankan** karena uang dari pembeli tamu tetap merupakan pendapatan riil toko. Menghapusnya akan menyebabkan bias *underestimation* sebesar ~25%.
 3. **Penyaringan `UnitPrice <= 0`:** Terdapat `2.512` baris dengan harga nol atau negatif yang merupakan catatan inventaris gudang (*damaged*, *lost*, *adjustment*), bukan transaksi jual-beli ke konsumen.
 4. **Penyaringan `Quantity <= 0`:** Faktur berawalan huruf 'C' (*cancellations*) dan kuantitas negatif dipisahkan agar fokus analisis adalah **Gross Sales Demand** (permintaan belanja riil).
-5. **Feature Engineering `TotalAmount`:** Dibuat dari formula $\text{TotalAmount} = \text{Quantity} \times \text{UnitPrice}$ sebagai target omset harian toko.
+5. **Feature Engineering `TotalAmount`:** Dibuat dari formula `TotalAmount = Quantity × UnitPrice` sebagai target omset harian toko.
 
 Dataset bersih menghasilkan **`524.878` baris transaksi valid** dengan total omset kotor sebesar **£10.642.110,80**.
 
@@ -80,10 +80,10 @@ Grafik bulanan menunjukkan lonjakan tajam pada bulan November 2011 (£1,5 Juta).
 * **Test Set:** 10 November 2011 – 9 Desember 2011 (`30 hari terakhir` / periode puncak akhir tahun)
 
 ### 2. Model yang Diuji:
-1. **Baseline 1 (Naive Last Day):** Mengasumsikan penjualan hari ini sama dengan kemarin ($\hat{y}_t = y_{t-1}$).
-2. **Baseline 2 (Seasonal Naive 7-Day):** Mengasumsikan penjualan hari ini sama dengan hari yang sama pada minggu lalu ($\hat{y}_t = y_{t-7}$).
+1. **Baseline 1 (Naive Last Day):** Mengasumsikan penjualan hari ini sama dengan kemarin (`y_t = y_{t-1}`).
+2. **Baseline 2 (Seasonal Naive 7-Day):** Mengasumsikan penjualan hari ini sama dengan hari yang sama pada minggu lalu (`y_t = y_{t-7}`).
 3. **Baseline 3 (7-Day Moving Average):** Menggunakan rata-rata bergerak 7 hari terakhir.
-4. **Holt-Winters Exponential Smoothing (ETS):** Memodelkan komponen *additive trend* dan *additive seasonality* dengan siklus periode $s=7$.
+4. **Holt-Winters Exponential Smoothing (ETS):** Memodelkan komponen *additive trend* dan *additive seasonality* dengan siklus periode mingguan (`s = 7`).
 5. **Machine Learning (Random Forest Regressor):** Memanfaatkan fitur lag (Lag 1, 2, 7, 14), 7-day rolling mean, hari dalam seminggu, tanggal, dan bulan.
 
 ---
